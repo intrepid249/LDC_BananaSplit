@@ -55,7 +55,7 @@ namespace LDC_BananaSplit
             Client.MessageReceived += HandleMessageReceived;
             Client.Ready += async () =>
             {
-                await Client.SetGameAsync("the ice melt", type: ActivityType.Listening);
+                await Client.SetGameAsync("core functionality", type: ActivityType.Listening);
             };
             Client.Log += LogAsync;
             Commands.Log += LogAsync;

@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 
 namespace LDC_BananaSplit.Modules.user
 {
+    [Summary("A list of commands for requesting and approving membership")]
     public class UserMemberRequest : ModuleBase<PrefixCommandContext>
     {
         [UserPrefix]
         [Command("recruit")]
+        [Summary("Request membership to the registered nomination channel")]
         public async Task MemberRequest()
         {
             if (Core.iniConfig.GetValue("ChannelData", "NominationChannel") == null || Core.iniConfig.GetValue("ChannelData", "NominationChannel").Equals(""))
@@ -78,7 +80,8 @@ namespace LDC_BananaSplit.Modules.user
 
         [AdminPrefix]
         [Command("Approve")]
-        public async Task ApproveMembership(SocketGuildUser user)
+        [Summary("Not yet implemented")]
+        public async Task ApproveMembership([Summary("@user")]SocketGuildUser user)
         {
             Embed approveEb = new EmbedBuilder()
                 .WithTitle("Membership Approved")
@@ -92,7 +95,8 @@ namespace LDC_BananaSplit.Modules.user
 
         [AdminPrefix]
         [Command("Approve")]
-        public async Task ApproveMembership(ulong nominationID)
+        [Summary("Not yet implemented")]
+        public async Task ApproveMembership([Summary("x")]ulong nominationID)
         {
             if (Global.recruitList.ContainsKey(nominationID))
             {

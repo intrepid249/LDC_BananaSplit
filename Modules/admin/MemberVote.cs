@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 namespace LDC_BananaSplit.Modules.admin
 {
     [AdminPrefix]
+    [Summary("Commands for voting")]
     public class MemberVote : ModuleBase<PrefixCommandContext>
     {
         [Command("vote")]
-        public async Task Poll([Remainder]String pollTopic)
+        [Summary("Create a vote about a topic")]
+        public async Task Poll([Summary("Topic"), Remainder]String pollTopic)
         {
             if (pollTopic == null || pollTopic.Equals(""))
             {

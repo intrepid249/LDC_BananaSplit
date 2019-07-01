@@ -9,11 +9,13 @@ using LDC_BananaSplit.System.Attributes;
 
 namespace LDC_BananaSplit.Modules.admin
 {
+    [Summary("Utilities that help with managing the server")]
     public class Utils : ModuleBase<PrefixCommandContext>
     {
         [AdminPrefix]
         [Command("SetNominationChannel")]
-        public async Task SetNominationChannel(SocketGuildChannel channel)
+        [Summary("Set the channel member recruit messages are sent to")]
+        public async Task SetNominationChannel([Summary("#channel")]SocketGuildChannel channel)
         {
             Global.MemberNominationChannel = channel.Id;
 
