@@ -10,6 +10,8 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
+using LDC_BananaSplit.System.Resources;
 
 namespace LDC_BananaSplit
 {
@@ -20,6 +22,12 @@ namespace LDC_BananaSplit
         private readonly SemaphoreSlim ColorLock = new SemaphoreSlim(1, 1);
 
         public static IConfiguration Config;
+#if DEBUG
+        internal static Ini iniConfig = new Ini(Directory.GetCurrentDirectory() + "../../../config/configuration.ini");
+#else
+        internal static Ini iniConfig = new Ini(Directory.GetCurrentDirectory() + "/config/configuration.ini");
+#endif
+
         private readonly CommandService Commands = new CommandService(new CommandServiceConfig
         {
             LogLevel = LogSeverity.Debug,
@@ -37,6 +45,7 @@ namespace LDC_BananaSplit
             Cts = _cts;
 
             Config = BuildConfig();
+            iniConfig.Load();
 
             Services = ConfigureServices();
         }

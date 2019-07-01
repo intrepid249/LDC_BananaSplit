@@ -15,7 +15,7 @@ namespace LDC_BananaSplit.Modules.user
         [Command("recruit")]
         public async Task MemberRequest()
         {
-            if (Global.ConfigurationData["ChannelData"]["NominationChannel"] == null || Global.ConfigurationData["ChannelData"]["NominationChannel"].Equals(""))
+            if (Core.iniConfig.GetValue("ChannelData", "NominationChannel") == null || Core.iniConfig.GetValue("ChannelData", "NominationChannel").Equals(""))
             {
                 Embed eb = new EmbedBuilder()
                     .WithTitle("❌ Error")
@@ -68,7 +68,7 @@ namespace LDC_BananaSplit.Modules.user
                 .WithColor(174, 103, 229)
                 .Build();
 
-            var nominationChannel = Context.Guild.GetTextChannel(ulong.Parse(Global.ConfigurationData["ChannelData"]["NominationChannel"]));
+            var nominationChannel = Context.Guild.GetTextChannel(ulong.Parse(Core.iniConfig.GetValue("ChannelData", "NominationChannel")));
 
             var msg = await nominationChannel.SendMessageAsync(null, embed: nominationEb);
             await msg.AddReactionAsync(new Emoji("👍"));
