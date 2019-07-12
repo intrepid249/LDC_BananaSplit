@@ -157,7 +157,8 @@ namespace LDC_BananaSplit
         private IServiceProvider ConfigureServices()
             => new ServiceCollection()
             .AddSingleton(Client)
-            .AddSingleton(new AddReactionService(Client))
+            //.AddSingleton(new AddReactionService(Client))
+            .AddSingleton(new MemberJoinService(Client))
             .BuildServiceProvider();
     }
 }

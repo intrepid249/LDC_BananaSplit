@@ -57,7 +57,7 @@ namespace LDC_BananaSplit.Modules.user
 
             Embed recruitEb = new EmbedBuilder()
                 .WithTitle("Awaiting Approval")
-                .WithDescription("Your request has been logged, and the authorities notified")
+                .WithDescription("Your request has been logged, and the leadership team has been notified")
                 .WithColor(174, 103, 229)
                 .Build();
 
@@ -79,48 +79,45 @@ namespace LDC_BananaSplit.Modules.user
         }
 
         [AdminPrefix]
-        [Command("Approve")]
+        [Command("Approve"), RequireUserPermission(GuildPermission.ManageRoles)]
         [Summary("Not yet implemented")]
         public async Task ApproveMembership([Summary("@user")]SocketGuildUser user)
         {
+            await Task.Delay(TimeSpan.FromSeconds(3));
+            await Context.Message.DeleteAsync();
+
+            IRole playerRole = user.Guild.GetRole(567276137093398528);
+            IRole memberRole = user.Guild.GetRole(537496014647459842);
+
+            bool hasPlayerRole = false;
+            bool hasMemberRole = false;
+
+            foreach (var role in user.Roles)
+            {
+                if (role == playerRole)
+                    hasPlayerRole = true;
+
+                if (role == memberRole)
+                    hasMemberRole = true;
+            }
+
+            // Add the member role if the user has the player role, but NOT already a member
+            if (hasPlayerRole && !hasMemberRole)
+            {
+                await user.RemoveRoleAsync(playerRole);
+                await user.AddRoleAsync(memberRole);
+            }
+
             Embed approveEb = new EmbedBuilder()
                 .WithTitle("Membership Approved")
-                .WithDescription($"Congratulations {user.Mention} on receiving their membership to LDC")
+                .WithDescription($"Congratulations {user.Mention} on receiving your membership to LDC")
                 .WithColor(174, 103, 229)
-                .WithFooter($"*This would be posted in an announcement channel of some sort (If you'd like). Additionally it will auto assign the user the `member` role*")
+                .WithFooter($"Please enjoy the view")
                 .Build();
-            var approve = await Context.Channel.SendMessageAsync(null, embed: approveEb);
+
+            // Send a nice congratulatory message to the user
+            var approve = await user.Guild.GetTextChannel(591904276788281352).SendMessageAsync(null, embed: approveEb);
             await approve.AddReactionAsync(new Emoji("🎉"));
-        }
-
-        [AdminPrefix]
-        [Command("Approve")]
-        [Summary("Not yet implemented")]
-        public async Task ApproveMembership([Summary("x")]ulong nominationID)
-        {
-            if (Global.recruitList.ContainsKey(nominationID))
-            {
-                Embed approveEb = new EmbedBuilder()
-                .WithTitle("Membership Approved")
-                .WithDescription($"Congratulations {Global.recruitList[nominationID].Mention} on receiving their membership to LDC")
-                .WithColor(174, 103, 229)
-                .WithFooter($"*This would be posted in an announcement channel of some sort (If you'd like). Additionally it will auto assign the user the `member` role*")
-                .Build();
-                var approve = await Context.Channel.SendMessageAsync(null, embed: approveEb);
-                await approve.AddReactionAsync(new Emoji("🎉"));
-            }
-            else
-            {
-                Embed eb = new EmbedBuilder()
-                    .WithTitle("❌ Error")
-                    .WithDescription("Invalid nomination ID")
-                    .WithColor(255, 0, 0)
-                    .Build();
-
-                var error = await Context.Channel.SendMessageAsync(null, embed: eb);
-                await Task.Delay(3000);
-                await Context.Channel.DeleteMessageAsync(error);
-            }
         }
     }
 }
